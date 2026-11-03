@@ -560,23 +560,23 @@ $string .= '
 				if ( $field['notes'] != '' ) {
 					$string .= "\n". self::ctf_notes( $field['notes'] );
 				}
-				if ( ('checkbox' != $field['type'] && $field['standard'] < 1) && ( 'false' == $field['hide_label'] ) ) {
+		self::$aria_required = ( $field['req'] && 'true' == self::$form_options['aria_required'] ) ? ' aria-required="true" ' : '';
+		if ( ('checkbox' != $field['type'] && $field['standard'] < 1) && ( 'false' == $field['hide_label'] ) ) {
                     // hiding the label
-					// Standard field labels can be changed in options, so don't print them here
-					// single checkbox labels are printed next to the checkbox
-					$string .= "\n    <div ".' id="fscf_label' . self::$form_id_num . '_' . $key . '" ' .  self::get_this_css('title_style') .'>
+			// Standard field labels can be changed in options, so don't print them here
+			// single checkbox labels are printed next to the checkbox
+			$string .= "\n    <div ".' id="fscf_label' . self::$form_id_num . '_' . $key . '" ' .  self::get_this_css('title_style') .'>
       <label ';
 	    $string .= ( $field['label_css'] != '') ? self::convert_css( $field['label_css'] ) : self::get_this_css('label_style');
-		$string .= ' for="fscf_field' . self::$form_id_num . '_' . $key . '">' . esc_html($field['label']);
-					$string .= ( 'true' == $field['req'] ) ? self::$req_field_ind : '';
-					$string .= "</label>\n    </div>";
-				} else if ( ('checkbox' == $field['type'] && $field['standard'] < 1) || ( 'true' == $field['hide_label'] ) ) {
+			$string .= ' for="fscf_field' . self::$form_id_num . '_' . $key . '"' . self::$aria_required . '>' . esc_html($field['label']);
+			$string .= ( 'true' == $field['req'] ) ? self::$req_field_ind : '';
+			$string .= "</label>\n    </div>";
+		} else if ( ('checkbox' == $field['type'] && $field['standard'] < 1) || ( 'true' == $field['hide_label'] ) ) {
                     // single checkbox keep the div to maintain style left alignment (no label here), or hide label was checked
-					$string .= "\n    <div ".' id="fscf_label' . self::$form_id_num . '_' . $key . '" ' . self::get_this_css('title_style');
-					$string .= ">\n    </div>";
+			$string .= "\n    <div ".' id="fscf_label' . self::$form_id_num . '_' . $key . '" ' . self::get_this_css('title_style');
+			$string .= ">\n    </div>";
 
                 }
-				self::$aria_required = ( $field['req'] && 'true' == self::$form_options['aria_required'] ) ? ' aria-required="true" ' : '';
 			}
 
 			switch ( $field['type'] ) {
@@ -913,7 +913,7 @@ $string .= '    </div>
     <div ' . self::get_this_css('field_div_style') . '>' . self::echo_if_error( 'full_name' ) . '
       <input ';
 		$string .= ($field['input_css'] != '') ? self::convert_css( $field['input_css'] ) : self::get_this_css('field_style');
-		$string .= ' type="text" id="fscf_name' . self::$form_id_num . '" name="full_name" value="' . esc_attr( self::$form_content[$field['slug']] ) . '" ' . self::$aria_required;
+		$string .= ' type="text" id="fscf_name' . self::$form_id_num . '" name="full_name" value="' . esc_attr( self::$form_content[$field['slug']] ) . '" ' . self::$aria_required . ' autocomplete="name"';
         if($field['attributes'] != '')
 			  $string .= ' '.$field['attributes'];
         if($auto_fill) //auto form fill logged in name and email
@@ -1054,7 +1054,7 @@ $string .= '      <label ';
 		$string .= ($field['input_css'] != '') ? self::convert_css( $field['input_css'] ) : self::get_this_css('field_style');
 		$string .= ' type="'.$email_input_type.'" id="fscf_email' . self::$form_id_num . '" name="email" value="';
 			$string .= esc_attr( self::$form_content[$field['slug']] );
-		$string .= '" ' . self::$aria_required;
+		$string .= '" ' . self::$aria_required . ' autocomplete="email"';
         if($field['attributes'] != '')
 				  $string .= ' '.$field['attributes'];
         if($auto_fill) //auto form fill logged in name and email
@@ -1081,7 +1081,7 @@ $string .= '      <label ';
         $string .= "    </div>\n    <div " . self::get_this_css('field_div_style') . '>' . self::echo_if_error( 'email2' )
                 . "\n      <input ";
 		$string .= ($field['input_css'] != '') ? self::convert_css( $field['input_css'] ) : self::get_this_css('field_style');
-		$string .= ' type="'.$email_input_type.'" id="fscf_email' . self::$form_id_num. '_2" name="email2" value="' . esc_attr( self::$form_content['email2'] ) . '" ' . self::$aria_required;
+		$string .= ' type="'.$email_input_type.'" id="fscf_email' . self::$form_id_num. '_2" name="email2" value="' . esc_attr( self::$form_content['email2'] ) . '" ' . self::$aria_required . ' autocomplete="email"';
         if($field['attributes'] != '') // XXX same as email 1 though
 					  $string .= ' '.$field['attributes'];
         if($auto_fill) //auto form fill logged in name and email

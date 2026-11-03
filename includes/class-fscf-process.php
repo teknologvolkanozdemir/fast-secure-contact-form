@@ -77,6 +77,10 @@ class FSCF_Process {
 
 		// Do some security checks
 		self::check_security();
+
+		if ( ! is_array( $_POST ) ) {
+			return;
+		}
 		
 		self::validate_data();
 

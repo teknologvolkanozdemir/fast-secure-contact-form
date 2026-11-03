@@ -885,9 +885,8 @@ $('head').append(fscf_css);
 			  return self::sanitize_string(strip_tags(stripslashes($string)),$preserve_space);
 		   return trim(self::sanitize_string(strip_tags(stripslashes($string))));
 		} elseif ( is_array($string) ) {
-		  reset($string);
-		  while (list($key, $value) = each($string)) {
-			$string[$key] = self::clean_input($value,$preserve_space);
+		  foreach ( $string as $key => $value ) {
+			$string[$key] = self::clean_input($value, $preserve_space);
 		  }
 		  return $string;
 		} else {
@@ -897,9 +896,14 @@ $('head').append(fscf_css);
 
 	// functions for protecting and validating form vars
 	static function sanitize_string($string, $preserve_space = 0) {
-		if(!$preserve_space)
+		if ( ! is_scalar( $string ) && ! is_null( $string ) ) {
+			return $string;
+		}
+		$string = (string) $string;
+		if ( ! $preserve_space )
 		  $string = preg_replace("/ +/", ' ', trim($string));
 
+		$string = preg_replace('/[\x00-\x1F\x7F]/u', '', $string);
 		return preg_replace("/[<>]/", '_', $string);
 	} // end function sanitize_string
 
